@@ -3,8 +3,6 @@
 
 int main()
 {
-	std::cout << "Hello World!" << std::endl;
-
 	sqlite3 *db;
 	char *xErrMsg = 0;
 	int rc;
