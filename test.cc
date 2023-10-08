@@ -1,24 +1,25 @@
 #include <iostream>
-#include <sqlite3.h>
+#include <string>
+#include "SQLiteInterface.h"
+
+using namespace std;
 
 int main()
 {
-	sqlite3 *db;
-	char *xErrMsg = 0;
-	int rc;
+	SQLiteInterface* sqliteInterface = new SQLiteInterface( "testDatabase.db" );
 
-	rc = sqlite3_open( "testDatabase.db", &db );
+	string sql = "SELECT * FROM COMPANY";
 
-	if( rc )
+	if( !sqliteInterface->runStatement( sql ) )
 	{
-		std::cout << "Can't open database: %s" << std::endl;
+		std::cout << "Statement failed" << std::endl;
 	}
 	else
 	{
-		std::cout << "Opened database successfully" << std::endl;
+		std::cout << "Successfully ran statement" << std::endl;
 	}
-
-	sqlite3_close( db );
+	
+	delete sqliteInterface;
 
 	return 0;
 }
