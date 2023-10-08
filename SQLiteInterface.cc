@@ -62,14 +62,16 @@ bool SQLiteInterface::runQuery( const string& sql )
 	return true;
 }
 
-bool SQLiteInterface::runStatement( const string& sql )
+// This function does not manage it's own memory. The SQLiteResultSet must be deleted by the caller.
+SQLiteResultSet* SQLiteInterface::runStatement( const string& sql )
 {
 	sqlite3_stmt* stmt;
+	SQLiteResultSet* statementResultSet = new SQLiteResultSet();
 
 	if( sql == "" )
 	{
 		std::cout << "Unable to run query - No Query Provided" << std::endl;
-		return false;
+		return statementResultSet;
 	}
 
 	std::cout << "SQLQuery: " << sql << std::endl;
@@ -80,28 +82,39 @@ bool SQLiteInterface::runStatement( const string& sql )
 	{
 		std::cout << "Unable to run query - Unable to compile sql: " << sqlite3_errmsg( dbHandle ) << std::endl;
 		sqlite3_finalize( stmt );
-		return false;
+		return statementResultSet;
 	}
 
 	int rowNum = 0;
 	while( (responseCode = sqlite3_step( stmt ) ) == SQLITE_ROW )
 	{
+		SQLiteRow* row = new SQLiteRow();
+
+		int columnCount = sqlite3_column_count( stmt );
+		for( int i = 0; i < columnCount; i++ )
+		{
+			row->insertRecord( sqlite3_column_name( stmt, i ), (const char*) sqlite3_column_text( stmt, i ) );
+		}
+
+		std::cout << "Row " << rowNum << " " << row->formatRowForLog() << std::endl;
+
+		statementResultSet->insertRecord( *row );
+
+		delete row;
 		rowNum++;
-		std::cout << "TEST OUTPUT: " << sqlite3_column_text( stmt, 0 ) << std::endl;
-		std::cout << "TEST OUTPUT: " << sqlite3_column_text( stmt, 1 ) << std::endl;
-		std::cout << "TEST OUTPUT: " << sqlite3_column_text( stmt, 2 ) << std::endl;
-		std::cout << "TEST OUTPUT: " << sqlite3_column_text( stmt, 3 ) << std::endl;
+
+		std::cout << "ResultSet " << statementResultSet->formatResultSetForLog() << std::endl;
 	}
 
 	if( responseCode != SQLITE_DONE )
 	{
 		std::cout << "Unable to run query - Error during query: " << sqlite3_errmsg( dbHandle ) << std::endl;
-		return false;
+		return statementResultSet;
 	}
 
 	sqlite3_finalize( stmt );
 
-	return true;
+	return statementResultSet;
 
 	
 }

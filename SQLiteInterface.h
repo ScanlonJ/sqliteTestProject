@@ -1,6 +1,7 @@
 #include <sqlite3.h>
 #include <string>
 #include <iostream>
+#include "SQLiteResultSet.h"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ public:
 	void closeDB();
 
 	bool runQuery( const string& sql );
-	bool runStatement( const string& sql );
+	SQLiteResultSet* runStatement( const string& sql );
 
 protected:
 
