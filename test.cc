@@ -10,14 +10,9 @@ int main()
 
 	string sql = "SELECT * FROM COMPANY";
 
-	if( !sqliteInterface->runStatement( sql ) )
-	{
-		std::cout << "Statement failed" << std::endl;
-	}
-	else
-	{
-		std::cout << "Successfully ran statement" << std::endl;
-	}
+	SQLiteResultSet* result = sqliteInterface->runStatement( sql );
+
+	std::cout << "Results:" << std::endl << result->formatResultSetForLog() << std::endl;
 	
 	delete sqliteInterface;
 

@@ -15,6 +15,8 @@ public:
 	string getRecord( const string& name );
 
 	string formatRowForLog();
+	string getRowData();
+	string getColumnNames();
 
 protected:
 

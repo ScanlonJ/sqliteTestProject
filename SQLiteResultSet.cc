@@ -28,7 +28,7 @@ SQLiteRow SQLiteResultSet::getRecordByIndex( int index )
 
 string SQLiteResultSet::formatResultSetForLog()
 {
-	string output;
+	string output = resultSet[ 0 ].getColumnNames() + "\n";
 	
 	for( vector< SQLiteRow >::iterator it = resultSet.begin(); it != resultSet.end(); it++ )
 	{

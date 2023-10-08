@@ -85,7 +85,6 @@ SQLiteResultSet* SQLiteInterface::runStatement( const string& sql )
 		return statementResultSet;
 	}
 
-	int rowNum = 0;
 	while( (responseCode = sqlite3_step( stmt ) ) == SQLITE_ROW )
 	{
 		SQLiteRow* row = new SQLiteRow();
@@ -96,14 +95,9 @@ SQLiteResultSet* SQLiteInterface::runStatement( const string& sql )
 			row->insertRecord( sqlite3_column_name( stmt, i ), (const char*) sqlite3_column_text( stmt, i ) );
 		}
 
-		std::cout << "Row " << rowNum << " " << row->formatRowForLog() << std::endl;
-
 		statementResultSet->insertRecord( *row );
 
 		delete row;
-		rowNum++;
-
-		std::cout << "ResultSet " << statementResultSet->formatResultSetForLog() << std::endl;
 	}
 
 	if( responseCode != SQLITE_DONE )

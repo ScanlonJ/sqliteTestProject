@@ -24,15 +24,36 @@ string SQLiteRow::getRecord( const string& name )
 
 string SQLiteRow::formatRowForLog()
 {
-	string rowNames;
 	string rowData;
 
 	for( map< string, string >::iterator it = row.begin(); it != row.end(); ++it )
 	{
-		rowNames = rowNames + it->first + " "; 
 		rowData = rowData + it->second + " ";
 	}
 
-	return rowNames + "\n" + rowData;
+	return rowData;
 }
 
+string SQLiteRow::getRowData()
+{
+	string rowData;
+
+	for( map< string, string >::iterator it = row.begin(); it != row.end(); ++it )
+	{
+		rowData = rowData + it->second + "|";
+	}
+
+	return rowData;
+}
+
+string SQLiteRow::getColumnNames()
+{
+	string rowNames;
+
+	for( map< string, string >::iterator it = row.begin(); it != row.end(); ++it )
+	{
+		rowNames = rowNames + it->first + "|";
+	}
+
+	return rowNames;
+}
