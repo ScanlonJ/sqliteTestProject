@@ -1,3 +1,6 @@
+#ifndef __SQLITEROW_H__
+#define __SQLITEROW_H__
+
 #include <string>
 #include <iostream>
 #include <map>
@@ -23,3 +26,4 @@ protected:
 	std::map< string, string > row;
 };
 
+#endif

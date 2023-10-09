@@ -1,3 +1,6 @@
+#ifndef __SQLITEINTERFACE_H__
+#define __SQLITEINTERFACE_H__
+
 #include <sqlite3.h>
 #include <string>
 #include <iostream>
@@ -23,3 +26,5 @@ protected:
 	sqlite3* dbHandle;
 	char* SQLiteErrorMsg = 0;
 };
+
+#endif

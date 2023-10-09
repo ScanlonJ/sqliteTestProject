@@ -1,18 +1,20 @@
 #include "SQLiteInterface.h"
 
-
 SQLiteInterface::SQLiteInterface( const string& database )
 {
+	std::cout << "SQLiteInterface()" << std::endl;
 	OpenDB( database );
 }
 
 SQLiteInterface::~SQLiteInterface()
 {
+	std::cout << "~SQLiteInterface()" << std::endl;
 	closeDB();
 }
 
 bool SQLiteInterface::OpenDB( const string& database )
 {
+	std::cout << "SQLiteInterface::OpenDB()" << std::endl;
 	if( database == "" )
 	{
 		std::cout << "No database file provided" << std::endl;
@@ -36,7 +38,6 @@ bool SQLiteInterface::OpenDB( const string& database )
 void SQLiteInterface::closeDB()
 {
 	sqlite3_close( dbHandle );
-	
 }
 
 

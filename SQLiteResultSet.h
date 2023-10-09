@@ -1,3 +1,6 @@
+#ifndef __SQLITERESULTSET_H__
+#define __SQLITERESULTSET_H__
+
 #include <string>
 #include <iostream>
 #include <vector>
@@ -23,3 +26,4 @@ protected:
 	std::vector< SQLiteRow > resultSet;
 };
 
+#endif
