@@ -75,7 +75,6 @@ void DatabaseConnection::initializeDatabaseLayout()
 
 	string statementSQL = membersTableSQL +
 		memberInfoTableSQL +
-		memberContactInfoTableSQL +
 		memberBeltInfoTableSQL +
 		memberClassInfoSQL +
 		classTrackingTableSQL;
@@ -86,7 +85,47 @@ void DatabaseConnection::initializeDatabaseLayout()
 
 void DatabaseConnection::addMember( NVString& input )
 {
+	string in = input.getValue( NV_MEMBER_NAME );
+	string insertMembersSQL = "INSERT INTO Members (NAME)" +
+		" VALUES(" + input.getValue( NV_MEMBER_NAME ) + ")";
+	dbInterface->runStatement( insertMembersSQL );
+	
+	string getMemberIDQuerySQL = "SELECT ID FROM Members ORDER BY ID DESC LIMIT 1";
+	SQLiteResultSet* result = dbInterface->runStatement( getMemberIDQuerySQL );
+	SQLiteRow row = result.getNextRecord();
+	string memberID = row.getRecord( NV_MEMBER_ID );
+	
+	string insertMemberInfoSQL = "INSERT INTO MembersInfo (MemberID, Name, DateOfBirth, JoinDate)" +
+		" VALUES(" + memberID + ", " +
+		input.getValue( NV_MEMBER_NAME ) + ", " +
+		input.getValue( NV_MEMBER_DOB ) + ", " +
+		input.getValue( NV_MEMBER_JOIN_DATE ) + ")";
+	
+	string insertMemberContactInfoSQL = "INSERT INTO MembersContactInfo " +
+		"(MemberID, Name, Email, PhoneNumber, Relation)" +
+		" VALUES( " + memberID + ", " +
+		input.getValue( NV_MEMBER_NAME ) + ", " +
+		input.getValue( NV_MEMBER_EMAIL ) + ", " +
+		input.getValue( NV_MEMBER_PHONE ) + ", " +
+		input.getValue( NV_MEMBER_CONTACT ) + ")";
+	
+	string insertMemberBeltInfoSQL = "INSERT INTO MembersBeltInfo " +
+		"(MemberID, BeltLevel, DateOfLastTest, ClassesSinceLastTest)" +
+		" VALUES( " + memberID + ", " +
+		input.getValue( NV_MEMBER_BELT_LEVEL ) + ", " +
+		input.getValue( NV_MEMBER_DATE_OF_LAST_TEST ) + ", " +
+		input.getValue( NV_MEMBER_CLASSES_SINCE_LAST_TEST ) + ")";
 
+	string insertMemberClassInfoSQL = "INSERT INTO MembersClassInfo " +
+		"(MemberID, ClassesPurchases, ClassesAttended)" +
+		" VALUES( " + memberID + ", " +
+		input.getValue( NV_MEMBER_CLASSES_PURCHASED ) + ", " +
+		input.getValue( NV_MEMBER_CLASSES_ATTENDED ) + ")";
+
+	dbInterface->runStatement( insertMemberInfoSQL );
+	dbInterface->runStatement( insertMemberContactInfoSQL );
+	dbInterface->runStatement( insertMemberBeltInfoSQL );
+	dbInterface->runStatement( insertMemberClassInfoSQL );
 }
 
 void DatabaseConnection::updateMemberInfo( NVString& input )
